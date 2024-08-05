@@ -2,13 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import "./index.css";
+import Gameboard from "./Gameboard";
 
 const App = () => (
   <div className="container">
-    <div>Name: minesweeper</div>
-    <div>Framework: react</div>
-    <div>Language: TypeScript</div>
-    <div>CSS: Empty CSS</div>
+    <Gameboard rows={2} columns={2} />
   </div>
 );
 const rootElement = document.getElementById("app");
