@@ -27,6 +27,8 @@ describe("get bomb count", () => {
     { cells: 6, bombs: 2 },
     { cells: 9, bombs: 2 },
     { cells: 10, bombs: 3 },
+    { cells: 16, bombs: 3 },
+    { cells: 17, bombs: 4 },
   ];
 
   testValues.forEach(({ cells, bombs }) => {
@@ -35,3 +37,32 @@ describe("get bomb count", () => {
     });
   });
 });
+
+describe("get bomb locations", () => {
+  it("should return an array of 0 for a 1x1 grid", () => {
+    expect(getBombLocations(1, 0)).toEqual([]);
+  });
+
+  it("should return an array of 1 for a 1x2 grid", () => {
+    const locations = getBombLocations(2, 1);
+    expect(locations.length).toEqual(1);
+    expect(locations[0]).toBeGreaterThan(-1);
+    expect(locations[0]).toBeLessThan(2);
+  });
+});
+
+//@ts-ignore
+function getBombLocations(cells: number, bombs: number) {
+  const result: number[] = [];
+  for (let i = 0; i < bombs; i++) {
+    let added = false;
+    while (!added) {
+      const location = Math.floor(Math.random() * cells);
+      if (!result.includes(location)) {
+        result.push(location);
+        added = true;
+      }
+    }
+  }
+  return result;
+}
