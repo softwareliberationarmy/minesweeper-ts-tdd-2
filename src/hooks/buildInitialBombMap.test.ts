@@ -1,9 +1,12 @@
-import buildInitialBombMap, { getBombCount } from "./buildInitialBombMap";
+import buildInitialBombMap, {
+  getBombCount,
+  getBombLocations,
+} from "./buildInitialBombMap";
 
 describe("build initial bomb map", () => {
   it("should return just a single 0 for a 1x1 grid", () => {
     expect(buildInitialBombMap(1, 1)).toEqual([
-      [{ isRevealed: false, outcome: "0" }],
+      [{ isRevealed: false, outcome: "" }],
     ]);
   });
 
@@ -14,6 +17,22 @@ describe("build initial bomb map", () => {
     expect(bombCount).toHaveLength(1);
     const onesCount = allCells.filter((cell) => cell.outcome === "1");
     expect(onesCount).toHaveLength(1);
+  });
+
+  it("should return a 2x2 grid with one bomb and three 1s", () => {
+    const result = buildInitialBombMap(2, 2);
+    const allCells = result.flat();
+    const bombCount = allCells.filter((cell) => cell.outcome === "X");
+    expect(bombCount).toHaveLength(1);
+    const onesCount = allCells.filter((cell) => cell.outcome === "1");
+    expect(onesCount).toHaveLength(3);
+  });
+
+  it("should return a 1x4 grid with at least one empty outcome", () => {
+    const result = buildInitialBombMap(1, 4);
+    const allCells = result.flat();
+    const emptyCount = allCells.filter((cell) => cell.outcome === "");
+    expect(emptyCount).not.toHaveLength(0);
   });
 });
 
@@ -49,20 +68,18 @@ describe("get bomb locations", () => {
     expect(locations[0]).toBeGreaterThan(-1);
     expect(locations[0]).toBeLessThan(2);
   });
-});
 
-//@ts-ignore
-function getBombLocations(cells: number, bombs: number) {
-  const result: number[] = [];
-  for (let i = 0; i < bombs; i++) {
-    let added = false;
-    while (!added) {
-      const location = Math.floor(Math.random() * cells);
-      if (!result.includes(location)) {
-        result.push(location);
-        added = true;
-      }
-    }
-  }
-  return result;
-}
+  it("should return an array of 1 for a grid of 4", () => {
+    const locations = getBombLocations(4, 1);
+    expect(locations.length).toEqual(1);
+    expect(locations[0]).toBeGreaterThan(-1);
+    expect(locations[0]).toBeLessThan(4);
+  });
+
+  it("doesn't include duplicate values", () => {
+    const locations = getBombLocations(2, 2);
+    expect(locations.length).toEqual(2);
+    expect(locations.includes(0)).toBeTruthy();
+    expect(locations.includes(1)).toBeTruthy();
+  });
+});
