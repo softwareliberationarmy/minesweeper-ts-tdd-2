@@ -1,5 +1,6 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import useBombMap from "./useBombMap";
+import { Outcome } from "../enums/Outcome";
 
 describe("use bomb map hook", () => {
   it("should return a 2D array of objects matching the row and column counts", () => {
@@ -22,6 +23,39 @@ describe("use bomb map hook", () => {
     });
     await waitFor(() => {
       expect(result.current.bombMap[1][0].isRevealed).toBe(true);
+    });
+  });
+
+  it("should return an outcome of success when you reveal all the good squares", async () => {
+    const { result } = renderHook(() => useBombMap(1, 1));
+    expect(result.current.outcome).toBe(Outcome.Uncertain);
+
+    act(() => {
+      result.current.revealCell(0, 0);
+    });
+
+    await waitFor(() => {
+      expect(result.current.bombMap[0][0].isRevealed).toBe(true);
+    });
+    await waitFor(() => {
+      expect(result.current.outcome).toBe(Outcome.Success);
+    });
+  });
+
+  it("should return an outcome of failure when you reveal a bomb", async () => {
+    const { result } = renderHook(() => useBombMap(1, 2));
+    expect(result.current.outcome).toBe(Outcome.Uncertain);
+
+    act(() => {
+      result.current.revealCell(0, 0);
+    });
+
+    act(() => {
+      result.current.revealCell(0, 1);
+    });
+
+    await waitFor(() => {
+      expect(result.current.outcome).toBe(Outcome.Failure);
     });
   });
 });

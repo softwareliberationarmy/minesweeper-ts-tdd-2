@@ -1,16 +1,13 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import buildInitialBombMap from "./buildInitialBombMap";
+import { Outcome } from "../enums/Outcome";
 
-export default function useBombMap(
-  rows: number,
-  columns: number
-): {
-  bombMap: { isRevealed: boolean; outcome: string }[][];
-  revealCell: (i: number, j: number) => void;
-} {
-  const [bombMap, setBombMap] = React.useState(() => {
+export default function useBombMap(rows: number, columns: number) {
+  const [bombMap, setBombMap] = useState(() => {
     return buildInitialBombMap(rows, columns);
   });
+
+  const [outcome, setOutcome] = useState(Outcome.Uncertain);
 
   const revealCell = (i: number, j: number): void => {
     setBombMap((prev) => {
@@ -21,5 +18,20 @@ export default function useBombMap(
     });
   };
 
-  return { bombMap, revealCell };
+  useEffect(() => {
+    if (
+      bombMap.flat().some((cell) => cell.outcome === "X" && cell.isRevealed)
+    ) {
+      setOutcome(Outcome.Failure);
+    } else if (
+      bombMap
+        .flat()
+        .filter((cell) => cell.outcome !== "X")
+        .every((cell) => cell.isRevealed)
+    ) {
+      setOutcome(Outcome.Success);
+    }
+  }, [bombMap]);
+
+  return { bombMap, revealCell, outcome };
 }
