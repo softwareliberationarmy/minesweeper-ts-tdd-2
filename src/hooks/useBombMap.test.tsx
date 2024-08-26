@@ -58,4 +58,15 @@ describe("use bomb map hook", () => {
       expect(result.current.outcome).toBe(Outcome.Failure);
     });
   });
+
+  it("handles index out of range requests for revealCell", () => {
+    const { result } = renderHook(() => useBombMap(1, 1));
+    expect(result.current.outcome).toBe(Outcome.Uncertain);
+
+    act(() => {
+      result.current.revealCell(1, 1);
+    });
+
+    expect(result.current.outcome).toBe(Outcome.Uncertain);
+  });
 });

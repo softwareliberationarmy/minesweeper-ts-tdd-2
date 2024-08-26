@@ -12,14 +12,21 @@ export default function useBombMap(rows: number, columns: number) {
   const revealCell = (i: number, j: number): void => {
     setBombMap((prev) => {
       const updated = [...prev];
-      updated[i] = [...updated[i]];
-      updated[i][j] = { ...updated[i][j], isRevealed: true };
+      if (updated.length > i && updated[i].length > j) {
+        updated[i] = [...updated[i]];
+        updated[i][j] = { ...updated[i][j], isRevealed: true };
+      } else {
+        console.warn(`Invalid cell coordinates {${i}, ${j}}`);
+      }
+
       return updated;
     });
   };
 
   useEffect(() => {
-    if (
+    if (!bombMap.flat().some((cell) => cell.isRevealed)) {
+      setOutcome(Outcome.Uncertain);
+    } else if (
       bombMap.flat().some((cell) => cell.outcome === "X" && cell.isRevealed)
     ) {
       setOutcome(Outcome.Failure);

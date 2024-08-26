@@ -4,13 +4,13 @@ import React from "react";
 import Gameboard from "./Gameboard";
 import userEvent from "@testing-library/user-event";
 
-const mockBombMap = jest.fn();
+const mockInitialBombMap = jest.fn();
 jest.mock("./hooks/buildInitialBombMap", () => {
-  return jest.fn(() => mockBombMap());
+  return jest.fn(() => mockInitialBombMap());
 });
 
 describe("Gameboard", () => {
-  mockBombMap.mockReturnValue([
+  mockInitialBombMap.mockReturnValue([
     [
       { isRevealed: false, outcome: "X" },
       { isRevealed: false, outcome: "1" },
@@ -36,9 +36,13 @@ describe("Gameboard", () => {
       const buttons = screen.getAllByRole("button");
       expect(buttons).toHaveLength(4);
     });
+  });
 
+  describe("when a button is clicked", () => {
     it("should show the number under the button when you click the button", async () => {
-      mockBombMap.mockReturnValue([[{ isRevealed: false, outcome: "0" }]]);
+      mockInitialBombMap.mockReturnValue([
+        [{ isRevealed: false, outcome: "0" }],
+      ]);
       const user = userEvent.setup();
       render(<Gameboard rows={1} columns={1} />);
       expect(screen.queryByText("0")).not.toBeInTheDocument();
@@ -46,6 +50,41 @@ describe("Gameboard", () => {
       await user.click(screen.getByRole("button"));
       await waitFor(() => {
         expect(screen.getByText("0")).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("when the game concludes", () => {
+    it("shows a failure message when you click on a bomb", async () => {
+      console.log("testing failure message");
+      mockInitialBombMap.mockReturnValue([
+        [{ isRevealed: false, outcome: "X" }],
+      ]);
+      const user = userEvent.setup();
+      render(<Gameboard rows={1} columns={1} />);
+      expect(screen.getByText("Good luck!")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button"));
+
+      await waitFor(() => {
+        expect(screen.getByText("Sorry, you lose!")).toBeInTheDocument();
+      });
+    });
+
+    it("shows a success message when you click on all non-bomb cells", async () => {
+      console.log("testing success message");
+
+      mockInitialBombMap.mockReturnValue([
+        [{ isRevealed: false, outcome: "0" }],
+      ]);
+      const user = userEvent.setup();
+      render(<Gameboard rows={1} columns={1} />);
+      expect(screen.getByText("Good luck!")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button"));
+
+      await waitFor(() => {
+        expect(screen.getByText("Congratulations!")).toBeInTheDocument();
       });
     });
   });
