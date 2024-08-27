@@ -47,6 +47,7 @@ export default function Gameboard({ rows = 2, columns = 2 }: Readonly<Props>) {
                   key={`${i}_${j}`}
                   className="cell-hidden"
                   data-testid="cell-hidden"
+                  disabled={outcome !== Outcome.Uncertain}
                   onClick={() => handleClick(i, j)}
                 ></button>
               );

@@ -8,4 +8,3 @@ TODO:
 - styling!
 - right-click to add flag to a bomb cell
 - selectors for size of the gameboard
-- disable buttons when final outcome

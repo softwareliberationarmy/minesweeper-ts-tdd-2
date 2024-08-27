@@ -84,5 +84,24 @@ describe("Gameboard", () => {
         expect(screen.getByText("Congratulations!")).toBeInTheDocument();
       });
     });
+
+    it("doesn't allow any more buttons to be clicked", async () => {
+      mockInitialBombMap.mockReturnValue([
+        [
+          { isRevealed: false, outcome: "💣" },
+          { isRevealed: false, outcome: "1" },
+        ],
+        [
+          { isRevealed: false, outcome: "1" },
+          { isRevealed: false, outcome: "1" },
+        ],
+      ]);
+      render(<Gameboard rows={2} columns={2} />);
+      const button = screen.getAllByRole("button")[0];
+      userEvent.click(button);
+      await waitFor(() => {
+        expect(screen.getAllByRole("button")[0]).toBeDisabled();
+      });
+    });
   });
 });
