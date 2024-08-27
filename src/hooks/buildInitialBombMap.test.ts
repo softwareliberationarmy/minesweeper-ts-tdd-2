@@ -13,7 +13,7 @@ describe("build initial bomb map", () => {
   it("should return a 1x2 grid with one bomb and one 1", () => {
     const result = buildInitialBombMap(1, 2);
     const allCells = result.flat();
-    const bombCount = allCells.filter((cell) => cell.outcome === "X");
+    const bombCount = allCells.filter((cell) => cell.outcome === "💣");
     expect(bombCount).toHaveLength(1);
     const onesCount = allCells.filter((cell) => cell.outcome === "1");
     expect(onesCount).toHaveLength(1);
@@ -22,7 +22,7 @@ describe("build initial bomb map", () => {
   it("should return a 2x2 grid with one bomb and three 1s", () => {
     const result = buildInitialBombMap(2, 2);
     const allCells = result.flat();
-    const bombCount = allCells.filter((cell) => cell.outcome === "X");
+    const bombCount = allCells.filter((cell) => cell.outcome === "💣");
     expect(bombCount).toHaveLength(1);
     const onesCount = allCells.filter((cell) => cell.outcome === "1");
     expect(onesCount).toHaveLength(3);

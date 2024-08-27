@@ -12,7 +12,7 @@ jest.mock("./hooks/buildInitialBombMap", () => {
 describe("Gameboard", () => {
   mockInitialBombMap.mockReturnValue([
     [
-      { isRevealed: false, outcome: "X" },
+      { isRevealed: false, outcome: "💣" },
       { isRevealed: false, outcome: "1" },
     ],
     [
@@ -57,7 +57,7 @@ describe("Gameboard", () => {
   describe("when the game concludes", () => {
     it("shows a failure message when you click on a bomb", async () => {
       mockInitialBombMap.mockReturnValue([
-        [{ isRevealed: false, outcome: "X" }],
+        [{ isRevealed: false, outcome: "💣" }],
       ]);
       const user = userEvent.setup();
       render(<Gameboard rows={1} columns={1} />);
@@ -71,7 +71,6 @@ describe("Gameboard", () => {
     });
 
     it("shows a success message when you click on all non-bomb cells", async () => {
-
       mockInitialBombMap.mockReturnValue([
         [{ isRevealed: false, outcome: "0" }],
       ]);

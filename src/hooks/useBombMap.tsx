@@ -27,13 +27,13 @@ export default function useBombMap(rows: number, columns: number) {
     if (!bombMap.flat().some((cell) => cell.isRevealed)) {
       setOutcome(Outcome.Uncertain);
     } else if (
-      bombMap.flat().some((cell) => cell.outcome === "X" && cell.isRevealed)
+      bombMap.flat().some((cell) => cell.outcome === "💣" && cell.isRevealed)
     ) {
       setOutcome(Outcome.Failure);
     } else if (
       bombMap
         .flat()
-        .filter((cell) => cell.outcome !== "X")
+        .filter((cell) => cell.outcome !== "💣")
         .every((cell) => cell.isRevealed)
     ) {
       setOutcome(Outcome.Success);
