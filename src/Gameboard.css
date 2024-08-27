@@ -1,0 +1,23 @@
+.game-board {
+display: flex;
+flex-direction: column ;
+}
+
+.board-row {
+    display: flex;
+}
+
+.cell-outcome, .cell-hidden {
+    flex: 0 0 auto;
+    height: 60px;
+    width: 60px;
+    margin: 0px;
+    font-size: 2rem;
+}
+
+.cell-outcome {
+    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}

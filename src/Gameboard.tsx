@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useBombMap from "./hooks/useBombMap";
 import { Outcome } from "./enums/Outcome";
+import "./Gameboard.css";
 
 interface Props {
   rows?: number;
@@ -26,20 +27,25 @@ export default function Gameboard({ rows = 2, columns = 2 }: Readonly<Props>) {
   }, [outcome]);
 
   return (
-    <div>
+    <div className="board-page">
       <h1>Minesweeper</h1>
       <h2>{message}</h2>
-      <div data-testid="game-board">
+      <div className="game-board" data-testid="game-board">
         {bombMap.map((row, i) => (
-          <div key={i}>
+          <div className="board-row" key={i}>
             {row.map((cell, j) => {
               return cell.isRevealed ? (
-                <div key={`${i}_${j}`} data-testid="cell-outcome">
+                <div
+                  key={`${i}_${j}`}
+                  className="cell-outcome"
+                  data-testid="cell-outcome"
+                >
                   {cell.outcome}
                 </div>
               ) : (
                 <button
                   key={`${i}_${j}`}
+                  className="cell-hidden"
                   data-testid="cell-hidden"
                   onClick={() => handleClick(i, j)}
                 ></button>
