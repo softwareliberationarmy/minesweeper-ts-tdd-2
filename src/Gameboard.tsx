@@ -12,25 +12,15 @@ export default function Gameboard({ rows = 2, columns = 2 }: Readonly<Props>) {
   const [message, setMessage] = useState<string>("Good luck!");
 
   const handleClick = (i: number, j: number) => {
-    console.log("revealing cell", { i: i, j: j });
-
     revealCell(i, j);
   };
 
   useEffect(() => {
-    console.log("outcome changed", outcome);
-
     if (outcome === Outcome.Failure) {
-      console.log("setting message to failure");
-
       setMessage("Sorry, you lose!");
     } else if (outcome === Outcome.Success) {
-      console.log("setting message to success");
-
       setMessage("Congratulations!");
     } else {
-      console.log("setting message to good luck");
-
       setMessage("Good luck!");
     }
   }, [outcome]);

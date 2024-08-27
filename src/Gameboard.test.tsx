@@ -56,7 +56,6 @@ describe("Gameboard", () => {
 
   describe("when the game concludes", () => {
     it("shows a failure message when you click on a bomb", async () => {
-      console.log("testing failure message");
       mockInitialBombMap.mockReturnValue([
         [{ isRevealed: false, outcome: "X" }],
       ]);
@@ -72,7 +71,6 @@ describe("Gameboard", () => {
     });
 
     it("shows a success message when you click on all non-bomb cells", async () => {
-      console.log("testing success message");
 
       mockInitialBombMap.mockReturnValue([
         [{ isRevealed: false, outcome: "0" }],
