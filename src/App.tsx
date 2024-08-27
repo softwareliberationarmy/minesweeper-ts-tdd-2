@@ -6,7 +6,7 @@ import Gameboard from "./Gameboard";
 
 const App = () => (
   <div className="container">
-    <Gameboard rows={2} columns={2} />
+    <Gameboard rows={5} columns={5} />
   </div>
 );
 const rootElement = document.getElementById("app");
