@@ -69,4 +69,26 @@ describe("use bomb map hook", () => {
 
     expect(result.current.outcome).toBe(Outcome.Uncertain);
   });
+
+  it("should reset the game when you call resetGame", async () => {
+    const { result } = renderHook(() => useBombMap(1, 1));
+    expect(result.current.outcome).toBe(Outcome.Uncertain);
+
+    act(() => {
+      result.current.revealCell(0, 0);
+    });
+
+    await waitFor(() => {
+      expect(result.current.outcome).toBe(Outcome.Success);
+    });
+
+    act(() => {
+      result.current.resetGame();
+    });
+
+    await waitFor(() => {
+      expect(result.current.outcome).toBe(Outcome.Uncertain);
+      expect(result.current.bombMap[0][0].isRevealed).toBe(false);
+    });
+  });
 });

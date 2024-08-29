@@ -23,6 +23,10 @@ export default function useBombMap(rows: number, columns: number) {
     });
   };
 
+  const resetGame = () => {
+    setBombMap(buildInitialBombMap(rows, columns));
+  };
+
   useEffect(() => {
     if (!bombMap.flat().some((cell) => cell.isRevealed)) {
       setOutcome(Outcome.Uncertain);
@@ -40,5 +44,5 @@ export default function useBombMap(rows: number, columns: number) {
     }
   }, [bombMap]);
 
-  return { bombMap, revealCell, outcome };
+  return { bombMap, revealCell, outcome, resetGame };
 }

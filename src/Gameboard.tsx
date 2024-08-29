@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function Gameboard({ rows = 2, columns = 2 }: Readonly<Props>) {
-  const { bombMap, revealCell, outcome } = useBombMap(rows, columns);
+  const { bombMap, revealCell, outcome, resetGame } = useBombMap(rows, columns);
   const [message, setMessage] = useState<string>("Good luck!");
 
   const handleClick = (i: number, j: number) => {
@@ -55,6 +55,11 @@ export default function Gameboard({ rows = 2, columns = 2 }: Readonly<Props>) {
           </div>
         ))}
       </div>
+      {outcome !== Outcome.Uncertain && (
+        <button className="play-again" onClick={resetGame}>
+          Play again
+        </button>
+      )}
     </div>
   );
 }
