@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import "./index.css";
-import Gameboard from "./Gameboard";
+import Minesweeper from "./Minesweeper";
 
 const App = () => (
   <div className="container">
-    <Gameboard rows={5} columns={5} />
+    <Minesweeper rows={5} columns={5} />
   </div>
 );
 const rootElement = document.getElementById("app");
