@@ -4,7 +4,8 @@ This is an attempt to build the game minesweeper in React using strict TDD. Test
 
 TODO:
 
-- add a "play again" button
 - styling!
 - right-click to add flag to a bomb cell
+
 - selectors for size of the gameboard
+- add a Minesweeper.tsx for the gameboard and associated controls
