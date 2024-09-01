@@ -8,4 +8,4 @@ TODO:
 - right-click to add flag to a bomb cell
 
 - selectors for size of the gameboard
-- add a Minesweeper.tsx for the gameboard and associated controls
+- add react context for managing game state
