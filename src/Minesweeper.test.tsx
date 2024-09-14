@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 import Minesweeper from "./Minesweeper";
 import userEvent from "@testing-library/user-event";
+import { bombSymbol as originalBombSymbol } from "./hooks/buildNewBombMap";
 
 const mockBuildNewBombMap = jest.fn();
 jest.mock("./hooks/buildNewBombMap", () => {
@@ -12,7 +13,7 @@ jest.mock("./hooks/buildNewBombMap", () => {
 const cell = (displays: string) => {
   return { isRevealed: false, outcome: displays };
 };
-const bomb = cell("💣");
+const bomb = cell(originalBombSymbol);
 
 const oneByOneBombMap = () => [[bomb]];
 const oneByOneSuccessMap = () => [[cell("0")]];

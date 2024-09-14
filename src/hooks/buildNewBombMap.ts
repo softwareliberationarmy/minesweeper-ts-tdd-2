@@ -1,3 +1,5 @@
+export const bombSymbol: string = "💣";
+
 export function getBombCount(cells: number) {
   const bombs = Math.floor(Math.sqrt(cells - 1));
   return bombs;
@@ -32,7 +34,7 @@ export default function buildNewBombMap(
     for (let col = 0; col < columns; col++) {
       const cellIndex = row * columns + col;
       if (bombLocations.includes(cellIndex)) {
-        result[row].push({ isRevealed: false, outcome: "💣" });
+        result[row].push({ isRevealed: false, outcome: bombSymbol });
       } else {
         result[row].push({ isRevealed: false, outcome: "" });
       }
@@ -40,7 +42,7 @@ export default function buildNewBombMap(
   }
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < columns; col++) {
-      if (result[row][col].outcome === "💣") {
+      if (result[row][col].outcome === bombSymbol) {
         //increment the surrounding cells
         for (let i = -1; i <= 1; i++) {
           for (let j = -1; j <= 1; j++) {
@@ -50,7 +52,7 @@ export default function buildNewBombMap(
               col + j >= 0 &&
               col + j < columns
             ) {
-              if (result[row + i][col + j].outcome !== "💣") {
+              if (result[row + i][col + j].outcome !== bombSymbol) {
                 result[row + i][col + j].outcome = (
                   +result[row + i][col + j].outcome + 1
                 ).toString();

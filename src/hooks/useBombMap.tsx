@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import buildNewBombMap from "./buildNewBombMap";
+import buildNewBombMap, { bombSymbol } from "./buildNewBombMap";
 import { Outcome } from "../enums/Outcome";
 
 export default function useBombMap(rows: number, columns: number) {
@@ -35,13 +35,15 @@ export default function useBombMap(rows: number, columns: number) {
     if (!bombMap.flat().some((cell) => cell.isRevealed)) {
       setOutcome(Outcome.Uncertain);
     } else if (
-      bombMap.flat().some((cell) => cell.outcome === "💣" && cell.isRevealed)
+      bombMap
+        .flat()
+        .some((cell) => cell.outcome === bombSymbol && cell.isRevealed)
     ) {
       setOutcome(Outcome.Failure);
     } else if (
       bombMap
         .flat()
-        .filter((cell) => cell.outcome !== "💣")
+        .filter((cell) => cell.outcome !== bombSymbol)
         .every((cell) => cell.isRevealed)
     ) {
       setOutcome(Outcome.Success);
