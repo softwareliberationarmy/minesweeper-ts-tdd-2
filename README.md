@@ -7,5 +7,4 @@ TODO:
 - styling!
 - right-click to add flag to a bomb cell
 
-- selectors for size of the gameboard
 - add react context for managing game state

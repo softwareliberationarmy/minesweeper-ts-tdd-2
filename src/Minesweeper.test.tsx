@@ -4,9 +4,9 @@ import React from "react";
 import Minesweeper from "./Minesweeper";
 import userEvent from "@testing-library/user-event";
 
-const mockInitialBombMap = jest.fn();
+const mockBuildNewBombMap = jest.fn();
 jest.mock("./hooks/buildNewBombMap", () => {
-  return jest.fn((rows, cols) => mockInitialBombMap(rows, cols));
+  return jest.fn((rows, cols) => mockBuildNewBombMap(rows, cols));
 });
 
 const cell = (displays: string) => {
@@ -18,7 +18,7 @@ const oneByOneBombMap = () => [[bomb]];
 const oneByOneSuccessMap = () => [[cell("0")]];
 
 describe("Minesweeper game", () => {
-  mockInitialBombMap.mockReturnValue([
+  mockBuildNewBombMap.mockReturnValue([
     [bomb, cell("1")],
     [cell("1"), cell("1")],
   ]);
@@ -47,7 +47,7 @@ describe("Minesweeper game", () => {
 
   describe("when different rows and columns are selected", () => {
     it("should show the correct number of buttons", async () => {
-      mockInitialBombMap.mockImplementation((rows, cols) => {
+      mockBuildNewBombMap.mockImplementation((rows, cols) => {
         return Array.from({ length: rows }, () =>
           Array.from({ length: cols }, () => cell("1"))
         );
@@ -72,7 +72,7 @@ describe("Minesweeper game", () => {
 
   describe("when a button is clicked", () => {
     it("should show the number under the button when you click the button", async () => {
-      mockInitialBombMap.mockReturnValue(oneByOneSuccessMap());
+      mockBuildNewBombMap.mockReturnValue(oneByOneSuccessMap());
       const user = userEvent.setup();
       render(<Minesweeper rows={1} columns={1} />);
       expect(screen.queryByText("0")).not.toBeInTheDocument();
@@ -86,7 +86,7 @@ describe("Minesweeper game", () => {
 
   describe("when the game concludes", () => {
     it("shows a failure message when you click on a bomb", async () => {
-      mockInitialBombMap.mockReturnValue(oneByOneBombMap());
+      mockBuildNewBombMap.mockReturnValue(oneByOneBombMap());
       const user = userEvent.setup();
       render(<Minesweeper rows={1} columns={1} />);
       expect(screen.getByText("Good luck!")).toBeInTheDocument();
@@ -99,7 +99,7 @@ describe("Minesweeper game", () => {
     });
 
     it("shows a success message when you click on all non-bomb cells", async () => {
-      mockInitialBombMap.mockReturnValue(oneByOneSuccessMap());
+      mockBuildNewBombMap.mockReturnValue(oneByOneSuccessMap());
       const user = userEvent.setup();
       render(<Minesweeper rows={1} columns={1} />);
       expect(screen.getByText("Good luck!")).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe("Minesweeper game", () => {
     });
 
     it("doesn't allow any more buttons to be clicked", async () => {
-      mockInitialBombMap.mockReturnValue([
+      mockBuildNewBombMap.mockReturnValue([
         [bomb, cell("1")],
         [cell("1"), cell("1")],
       ]);
@@ -125,7 +125,7 @@ describe("Minesweeper game", () => {
     });
 
     it("shows a play again button when you lose", async () => {
-      mockInitialBombMap.mockReturnValue(oneByOneBombMap());
+      mockBuildNewBombMap.mockReturnValue(oneByOneBombMap());
       const user = userEvent.setup();
       render(<Minesweeper rows={1} columns={1} />);
       expect(screen.getByText("Good luck!")).toBeInTheDocument();
@@ -140,7 +140,7 @@ describe("Minesweeper game", () => {
     });
 
     it("resets the gameboard when you click play again", async () => {
-      mockInitialBombMap.mockReturnValue(oneByOneBombMap());
+      mockBuildNewBombMap.mockReturnValue(oneByOneBombMap());
       const user = userEvent.setup();
       render(<Minesweeper rows={1} columns={1} />);
       expect(screen.getByText("Good luck!")).toBeInTheDocument();
