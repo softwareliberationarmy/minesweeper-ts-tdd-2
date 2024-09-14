@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
-import buildInitialBombMap from "./buildInitialBombMap";
+import buildNewBombMap from "./buildInitialBombMap";
 import { Outcome } from "../enums/Outcome";
 
 export default function useBombMap(rows: number, columns: number) {
   const [bombMap, setBombMap] = useState(() => {
-    return buildInitialBombMap(rows, columns);
+    return buildNewBombMap(rows, columns);
   });
 
   const [outcome, setOutcome] = useState(Outcome.Uncertain);
+
+  useEffect(() => {
+    setBombMap(buildNewBombMap(rows, columns));
+  }, [rows, columns]);
 
   const revealCell = (i: number, j: number): void => {
     setBombMap((prev) => {
@@ -24,7 +28,7 @@ export default function useBombMap(rows: number, columns: number) {
   };
 
   const resetGame = () => {
-    setBombMap(buildInitialBombMap(rows, columns));
+    setBombMap(buildNewBombMap(rows, columns));
   };
 
   useEffect(() => {

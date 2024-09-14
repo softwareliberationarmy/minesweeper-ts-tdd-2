@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import React from "react";
 import Minesweeper from "./Minesweeper";
@@ -6,7 +6,7 @@ import userEvent from "@testing-library/user-event";
 
 const mockInitialBombMap = jest.fn();
 jest.mock("./hooks/buildInitialBombMap", () => {
-  return jest.fn(() => mockInitialBombMap());
+  return jest.fn((rows, cols) => mockInitialBombMap(rows, cols));
 });
 
 const cell = (displays: string) => {
@@ -34,14 +34,39 @@ describe("Minesweeper game", () => {
     });
 
     it("should show all the buttons on the game board", () => {
-      render(<Minesweeper rows={2} columns={2} />);
+      render(<Minesweeper />);
       const buttons = screen.getAllByRole("button");
       expect(buttons).toHaveLength(4);
     });
 
     it("should not show a play again button", () => {
-      render(<Minesweeper rows={2} columns={2} />);
+      render(<Minesweeper />);
       expect(screen.queryByText("Play again")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("when different rows and columns are selected", () => {
+    it("should show the correct number of buttons", async () => {
+      mockInitialBombMap.mockImplementation((rows, cols) => {
+        return Array.from({ length: rows }, () =>
+          Array.from({ length: cols }, () => cell("1"))
+        );
+      });
+
+      const user = userEvent.setup();
+      render(<Minesweeper />);
+
+      await act(async () => {
+        await user.selectOptions(screen.getByLabelText("Rows"), "5");
+      });
+      await act(async () => {
+        await user.selectOptions(screen.getByLabelText("Columns"), "5");
+      });
+
+      await waitFor(() => {
+        const buttons = screen.getAllByRole("button");
+        expect(buttons).toHaveLength(25);
+      });
     });
   });
 

@@ -10,11 +10,13 @@ interface Props {
 }
 
 export default function Minesweeper({
-  rows = 2,
-  columns = 2,
+  rows: defaultRows = 2,
+  columns: defaultColumns = 2,
 }: Readonly<Props>) {
-  const { bombMap, revealCell, outcome, resetGame } = useBombMap(rows, columns);
   const [message, setMessage] = useState<string>("Good luck!");
+  const [rows, setRows] = useState<number>(defaultRows);
+  const [columns, setColumns] = useState<number>(defaultColumns);
+  const { bombMap, revealCell, outcome, resetGame } = useBombMap(rows, columns);
 
   useEffect(() => {
     if (outcome === Outcome.Failure) {
@@ -31,6 +33,25 @@ export default function Minesweeper({
       <h1>Minesweeper</h1>
       <h2>{message}</h2>
 
+      <div>
+        <label htmlFor="row-selector">Rows</label>
+        <select
+          id="row-selector"
+          value={rows}
+          onChange={(val) => setRows(+val.currentTarget.value)}
+        >
+          {generateOptions()}
+        </select>
+        <label htmlFor="column-selector">Columns</label>
+        <select
+          id="column-selector"
+          value={columns}
+          onChange={(val) => setColumns(+val.currentTarget.value)}
+        >
+          {generateOptions()}
+        </select>
+      </div>
+
       <Gameboard bombMap={bombMap} revealCell={revealCell} outcome={outcome} />
 
       {outcome !== Outcome.Uncertain && (
@@ -40,4 +61,12 @@ export default function Minesweeper({
       )}
     </div>
   );
+}
+
+function generateOptions(): React.ReactNode {
+  return Array.from({ length: 20 }, (_, i) => (
+    <option key={`option${i + 1}`} value={i + 1}>
+      {i + 1}
+    </option>
+  ));
 }
