@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import buildNewBombMap from "./buildInitialBombMap";
+import buildNewBombMap from "./buildNewBombMap";
 import { Outcome } from "../enums/Outcome";
 
 export default function useBombMap(rows: number, columns: number) {

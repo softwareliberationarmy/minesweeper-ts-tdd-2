@@ -5,7 +5,7 @@ import Minesweeper from "./Minesweeper";
 import userEvent from "@testing-library/user-event";
 
 const mockInitialBombMap = jest.fn();
-jest.mock("./hooks/buildInitialBombMap", () => {
+jest.mock("./hooks/buildNewBombMap", () => {
   return jest.fn((rows, cols) => mockInitialBombMap(rows, cols));
 });
 
