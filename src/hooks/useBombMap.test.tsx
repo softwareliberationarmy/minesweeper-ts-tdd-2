@@ -26,6 +26,23 @@ describe("use bomb map hook", () => {
     });
   });
 
+  it("should return a function to toggle the flag on a cell", async () => {
+    const { result } = renderHook(() => useBombMap(2, 2));
+    expect(result.current.bombMap[1][0].isFlagged).toBe(false);
+    act(() => {
+      result.current.toggleFlag(1, 0);
+    });
+    await waitFor(() => {
+      expect(result.current.bombMap[1][0].isFlagged).toBe(true);
+    });
+    act(() => {
+      result.current.toggleFlag(1, 0);
+    });
+    await waitFor(() => {
+      expect(result.current.bombMap[1][0].isFlagged).toBe(false);
+    });
+  });
+
   it("should return an outcome of success when you reveal all the good squares", async () => {
     const { result } = renderHook(() => useBombMap(1, 1));
     expect(result.current.outcome).toBe(Outcome.Uncertain);

@@ -20,7 +20,24 @@ export default function useBombMap(rows: number, columns: number) {
         updated[i] = [...updated[i]];
         updated[i][j] = { ...updated[i][j], isRevealed: true };
       } else {
-        console.warn(`Invalid cell coordinates {${i}, ${j}}`);
+        console.warn(`revealCell: Invalid cell coordinates {${i}, ${j}}`);
+      }
+
+      return updated;
+    });
+  };
+
+  const toggleFlag = (i: number, j: number): void => {
+    setBombMap((prev) => {
+      const updated = [...prev];
+      if (updated.length > i && updated[i].length > j) {
+        updated[i] = [...updated[i]];
+        updated[i][j] = {
+          ...updated[i][j],
+          isFlagged: !updated[i][j].isFlagged,
+        };
+      } else {
+        console.warn(`toggleFlag: Invalid cell coordinates {${i}, ${j}}`);
       }
 
       return updated;
@@ -50,5 +67,5 @@ export default function useBombMap(rows: number, columns: number) {
     }
   }, [bombMap]);
 
-  return { bombMap, revealCell, outcome, resetGame };
+  return { bombMap, revealCell, outcome, resetGame, toggleFlag };
 }

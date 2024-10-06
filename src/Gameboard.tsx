@@ -2,18 +2,25 @@ import React from "react";
 import { Outcome } from "./enums/Outcome";
 
 interface GameboardProps {
-  bombMap: { isRevealed: boolean; outcome: string }[][];
+  bombMap: { isRevealed: boolean; outcome: string; isFlagged: boolean }[][];
   revealCell: (i: number, j: number) => void;
   outcome: Outcome;
+  toggleFlag: (i: number, j: number) => void;
 }
 
 export default function Gameboard({
   bombMap,
   revealCell,
   outcome,
+  toggleFlag,
 }: Readonly<GameboardProps>) {
   const handleClick = (i: number, j: number) => {
     revealCell(i, j);
+  };
+
+  const handleRightClick = (e: React.MouseEvent, i: number, j: number) => {
+    e.preventDefault();
+    toggleFlag(i, j);
   };
 
   return (
@@ -36,7 +43,10 @@ export default function Gameboard({
                 data-testid="cell-hidden"
                 disabled={outcome !== Outcome.Uncertain}
                 onClick={() => handleClick(i, j)}
-              ></button>
+                onContextMenu={(e) => handleRightClick(e, i, j)}
+              >
+                {cell.isFlagged ? "🚩" : ""}
+              </button>
             );
           })}
         </div>

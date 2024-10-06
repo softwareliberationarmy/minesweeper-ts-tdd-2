@@ -16,7 +16,10 @@ export default function Minesweeper({
   const [message, setMessage] = useState<string>("Good luck!");
   const [rows, setRows] = useState<number>(defaultRows);
   const [columns, setColumns] = useState<number>(defaultColumns);
-  const { bombMap, revealCell, outcome, resetGame } = useBombMap(rows, columns);
+  const { bombMap, revealCell, outcome, resetGame, toggleFlag } = useBombMap(
+    rows,
+    columns
+  );
 
   useEffect(() => {
     if (outcome === Outcome.Failure) {
@@ -52,7 +55,12 @@ export default function Minesweeper({
         </select>
       </div>
 
-      <Gameboard bombMap={bombMap} revealCell={revealCell} outcome={outcome} />
+      <Gameboard
+        bombMap={bombMap}
+        revealCell={revealCell}
+        outcome={outcome}
+        toggleFlag={toggleFlag}
+      />
 
       {outcome !== Outcome.Uncertain && (
         <button className="play-again" onClick={resetGame}>

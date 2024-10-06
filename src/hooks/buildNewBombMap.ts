@@ -23,20 +23,28 @@ export function getBombLocations(cells: number, bombs: number) {
 export default function buildNewBombMap(
   rows: number,
   columns: number
-): { isRevealed: boolean; outcome: string }[][] {
+): { isRevealed: boolean; outcome: string; isFlagged: boolean }[][] {
   const cellCount = rows * columns;
   const bombCount = getBombCount(cellCount);
   const bombLocations = getBombLocations(cellCount, bombCount);
 
-  const result: { isRevealed: boolean; outcome: string }[][] = [];
+  const result: {
+    isRevealed: boolean;
+    outcome: string;
+    isFlagged: boolean;
+  }[][] = [];
   for (let row = 0; row < rows; row++) {
     result.push([]);
     for (let col = 0; col < columns; col++) {
       const cellIndex = row * columns + col;
       if (bombLocations.includes(cellIndex)) {
-        result[row].push({ isRevealed: false, outcome: bombSymbol });
+        result[row].push({
+          isRevealed: false,
+          outcome: bombSymbol,
+          isFlagged: false,
+        });
       } else {
-        result[row].push({ isRevealed: false, outcome: "" });
+        result[row].push({ isRevealed: false, outcome: "", isFlagged: false });
       }
     }
   }

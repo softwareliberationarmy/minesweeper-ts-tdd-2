@@ -8,12 +8,12 @@ describe("Game board", () => {
   describe("on initial render", () => {
     const bombMap = [
       [
-        { outcome: "💣", isRevealed: false },
-        { outcome: "1", isRevealed: false },
+        { outcome: "💣", isRevealed: false, isFlagged: false },
+        { outcome: "1", isRevealed: false, isFlagged: false },
       ],
       [
-        { outcome: "1", isRevealed: false },
-        { outcome: "1", isRevealed: false },
+        { outcome: "1", isRevealed: false, isFlagged: false },
+        { outcome: "1", isRevealed: false, isFlagged: false },
       ],
     ];
     it("should show the game board", () => {
@@ -22,6 +22,7 @@ describe("Game board", () => {
           bombMap={bombMap}
           outcome={Outcome.Uncertain}
           revealCell={() => {}}
+          toggleFlag={jest.fn()}
         />
       );
       expect(screen.getByTestId("game-board")).toBeInTheDocument();
@@ -33,6 +34,7 @@ describe("Game board", () => {
           bombMap={bombMap}
           outcome={Outcome.Uncertain}
           revealCell={() => {}}
+          toggleFlag={jest.fn()}
         />
       );
       const buttons = screen.getAllByRole("button");
@@ -45,6 +47,7 @@ describe("Game board", () => {
           bombMap={bombMap}
           outcome={Outcome.Success}
           revealCell={() => {}}
+          toggleFlag={jest.fn()}
         />
       );
       const buttons = screen.getAllByRole("button");
@@ -60,6 +63,7 @@ describe("Game board", () => {
           bombMap={bombMap}
           outcome={Outcome.Uncertain}
           revealCell={revealCell}
+          toggleFlag={jest.fn()}
         />
       );
 
@@ -69,6 +73,70 @@ describe("Game board", () => {
 
       await waitFor(() => {
         expect(revealCell).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    it("should not show any flags at the start", async () => {
+      render(
+        <Gameboard
+          bombMap={bombMap}
+          outcome={Outcome.Uncertain}
+          revealCell={jest.fn()}
+          toggleFlag={jest.fn()}
+        />
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByText("🚩")).toBeNull();
+      });
+    });
+
+    it("should call toggleFlag when a button is right-clicked", async () => {
+      const toggleFlag = jest.fn();
+      render(
+        <Gameboard
+          bombMap={bombMap}
+          outcome={Outcome.Uncertain}
+          revealCell={jest.fn()}
+          toggleFlag={toggleFlag}
+        />
+      );
+
+      act(() => {
+        screen
+          .getAllByRole("button")[0]
+          .dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+      });
+
+      await waitFor(() => {
+        expect(toggleFlag).toHaveBeenCalledWith(0, 0);
+      });
+    });
+
+    it("should post a flag for flagged cells", async () => {
+      const flaggedBombMap = [
+        [
+          { outcome: "💣", isRevealed: false, isFlagged: true },
+          { outcome: "1", isRevealed: false, isFlagged: false },
+        ],
+        [
+          { outcome: "1", isRevealed: false, isFlagged: false },
+          { outcome: "1", isRevealed: false, isFlagged: false },
+        ],
+      ];
+      render(
+        <Gameboard
+          bombMap={flaggedBombMap}
+          outcome={Outcome.Uncertain}
+          revealCell={jest.fn()}
+          toggleFlag={jest.fn()}
+        />
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getByText("🚩", { selector: "button" })
+        ).toBeInTheDocument();
       });
     });
   });

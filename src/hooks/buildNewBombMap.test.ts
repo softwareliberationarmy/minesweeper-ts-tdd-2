@@ -6,8 +6,17 @@ import buildNewBombMap, {
 describe("build initial bomb map", () => {
   it("should return just a single 0 for a 1x1 grid", () => {
     expect(buildNewBombMap(1, 1)).toEqual([
-      [{ isRevealed: false, outcome: "" }],
+      [{ isRevealed: false, outcome: "", isFlagged: false }],
     ]);
+  });
+
+  it("should set all cells as not flagged", () => {
+    const result = buildNewBombMap(100, 100);
+    result.forEach((row) => {
+      row.forEach((cell) => {
+        expect(cell.isFlagged).toBe(false);
+      });
+    });
   });
 
   it("should return a 1x2 grid with one bomb and one 1", () => {
